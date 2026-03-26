@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -417,27 +418,34 @@ function App(){
     try{
       // Use a serverless function approach via a public CORS-enabled endpoint
       const payload={model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:newMsgs.map(m=>({role:m.role,content:m.content}))};
-      const res=await fetch("https://corsproxy.io/?https://api.anthropic.com/v1/messages",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "anthropic-version":"2023-06-01",
-          "anthropic-dangerous-direct-browser-access":"true"
-        },
-        body:JSON.stringify(payload)
-      });
-      const rawText=await res.text();
-      let data;
-      try{data=JSON.parse(rawText);}catch(e){
-        setCoachMsgs([...newMsgs,{role:"assistant",content:"Parse error ("+res.status+"): "+rawText.slice(0,300)}]);
-        setCoachLoading(false);return;
+      // Try multiple CORS proxies in sequence
+      const proxies=[
+        "https://api.allorigins.win/raw?url=",
+        "https://corsproxy.io/?",
+        "https://cors-anywhere.herokuapp.com/"
+      ];
+      let lastError="";
+      let replied=false;
+      for(const proxy of proxies){
+        try{
+          const url=proxy==="https://cors-anywhere.herokuapp.com/"
+            ?proxy+"https://api.anthropic.com/v1/messages"
+            :proxy+encodeURIComponent("https://api.anthropic.com/v1/messages");
+          const res=await fetch(url,{
+            method:"POST",
+            headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+            body:JSON.stringify(payload)
+          });
+          const rawText=await res.text();
+          let data;
+          try{data=JSON.parse(rawText);}catch(e){lastError="Parse error: "+rawText.slice(0,100);continue;}
+          if(!res.ok||data.error){lastError="API error: "+(data&&data.error&&data.error.message?data.error.message:res.status);continue;}
+          const reply=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"No response — please try again.";
+          setCoachMsgs([...newMsgs,{role:"assistant",content:reply}]);
+          replied=true;break;
+        }catch(e){lastError=e.message;continue;}
       }
-      if(!res.ok){
-        setCoachMsgs([...newMsgs,{role:"assistant",content:"API error "+res.status+": "+(data&&data.error&&data.error.message?data.error.message:rawText.slice(0,300))}]);
-        setCoachLoading(false);return;
-      }
-      const reply=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"No response — please try again.";
-      setCoachMsgs([...newMsgs,{role:"assistant",content:reply}]);
+      if(!replied){setCoachMsgs([...newMsgs,{role:"assistant",content:"Could not connect to coach. Error: "+lastError+". Please check your internet connection and try again."}]);}
     }catch(e){
       setCoachMsgs([...newMsgs,{role:"assistant",content:"Error: "+e.name+" — "+e.message}]);
     }
@@ -659,12 +667,19 @@ function App(){
 
               {/* Search */}
               <div style={{marginBottom:8,position:"relative"}}>
-                <Inp value={foodSearch} onChange={v=>{
-                  setFoodSearch(v);setShowDB(v.length>0);
-                  if(searchTimer.current)clearTimeout(searchTimer.current);
-                  if(v.length>=2){searchTimer.current=setTimeout(()=>searchFoodDB(v),600);}
-                  else{setDbResults([]);}
-                }} placeholder="Search any food (chicken, Quest Bar, Chobani...)" style={{paddingRight:32}}/>
+                <input
+                  value={foodSearch}
+                  onChange={e=>{
+                    const v=e.target.value;
+                    setFoodSearch(v);
+                    setShowDB(v.length>0);
+                    if(searchTimer.current)clearTimeout(searchTimer.current);
+                    if(v.length>=2){searchTimer.current=setTimeout(()=>searchFoodDB(v),700);}
+                    else{setDbResults([]);}
+                  }}
+                  placeholder="Search any food (chicken, Quest Bar, Chobani...)"
+                  style={{background:"#0d1422",border:"1px solid #2a3050",color:"#e8e0d0",padding:"9px 12px",paddingRight:32,borderRadius:8,fontFamily:"DM Mono,monospace",fontSize:13,outline:"none",width:"100%"}}
+                />
                 <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:13,color:"#7a8aaa",pointerEvents:"none"}}>🔍</span>
                 {showDB&&foodSearch.length>0&&(()=>{
                   const localResults=[...savedFoods,...FOOD_DB].filter(f=>f.name.toLowerCase().includes(foodSearch.toLowerCase())).slice(0,4);
