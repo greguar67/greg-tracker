@@ -295,14 +295,36 @@ function App(){
   function delCustom(id){upDay(d=>({...d,custom:(d.custom||[]).filter(f=>f.id!==id)}))}
   function selFood(f){setCName(f.name);setCCals(String(f.cals));setCP(String(f.p));setCC(String(f.c));setCF(String(f.f));setFoodSearch("");setShowDB(false);setBStatus("");}
   function delSaved(n){const nx=savedFoods.filter(f=>f.name!==n);setSavedFoods(nx);sSet("saved-foods",nx);}
-  function lookupBarcode(code){
-    if(!code)return;setBLoading(true);setBStatus("Looking up "+code+"...");
-    setTimeout(()=>{
-      const found=BARCODE_DB[code.trim()];
-      if(found){setCName(found.name);setCCals(String(found.cals));setCP(String(found.p));setCC(String(found.c));setCF(String(found.f));setBInput("");setBStatus("Found: "+found.name+" — tap Add Food");}
-      else{setBStatus("Not found. Use name search or enter manually.");}
-      setBLoading(false);
-    },300);
+  async function lookupBarcode(code){
+    if(!code)return;
+    setBLoading(true);setBStatus("Looking up "+code+"...");
+    // Check local DB first for instant response
+    const local=BARCODE_DB[code.trim()];
+    if(local){
+      setCName(local.name);setCCals(String(local.cals));setCP(String(local.p));setCC(String(local.c));setCF(String(local.f));
+      setBInput("");setBStatus("Found: "+local.name+" — tap Add Food");
+      setBLoading(false);return;
+    }
+    // Fall back to Open Food Facts API
+    try{
+      const res=await fetch("https://world.openfoodfacts.org/api/v0/product/"+code.trim()+".json");
+      const data=await res.json();
+      if(data.status===1&&data.product){
+        const p=data.product;const n=p.nutriments||{};
+        const name=(p.product_name||p.abbreviated_product_name||("UPC "+code)).slice(0,60);
+        const cals=Math.round(n["energy-kcal_serving"]||n["energy-kcal_100g"]||0);
+        const protein=Math.round(n["proteins_serving"]||n["proteins_100g"]||0);
+        const carbs=Math.round(n["carbohydrates_serving"]||n["carbohydrates_100g"]||0);
+        const fat=Math.round(n["fat_serving"]||n["fat_100g"]||0);
+        setCName(name);setCCals(String(cals));setCP(String(protein));setCC(String(carbs));setCF(String(fat));
+        setBInput("");setBStatus("Found: "+name+" — review and tap Add Food");
+      }else{
+        setBStatus("Not found in database. Try name search or enter manually.");
+      }
+    }catch(e){
+      setBStatus("Lookup failed. Try name search or enter manually.");
+    }
+    setBLoading(false);
   }
   function logWeight(){
     const w=parseFloat(wInput);if(isNaN(w)||w<100||w>500)return;
@@ -365,16 +387,31 @@ function App(){
     setCoachMsgs(newMsgs);setCoachInput("");setCoachLoading(true);
     setTimeout(()=>chatEnd.current&&chatEnd.current.scrollIntoView({behavior:"smooth"}),100);
     try{
-      const res=await fetch("https://api.anthropic.com/v1/messages",{
+      // Use a serverless function approach via a public CORS-enabled endpoint
+      const payload={model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:newMsgs.map(m=>({role:m.role,content:m.content}))};
+      const res=await fetch("https://corsproxy.io/?https://api.anthropic.com/v1/messages",{
         method:"POST",
-        headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:sys,messages:newMsgs.map(m=>({role:m.role,content:m.content}))})
+        headers:{
+          "Content-Type":"application/json",
+          "anthropic-version":"2023-06-01",
+          "anthropic-dangerous-direct-browser-access":"true"
+        },
+        body:JSON.stringify(payload)
       });
-      const data=await res.json();
-      const reply=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"Sorry, could not get a response. Try again.";
+      const rawText=await res.text();
+      let data;
+      try{data=JSON.parse(rawText);}catch(e){
+        setCoachMsgs([...newMsgs,{role:"assistant",content:"Parse error ("+res.status+"): "+rawText.slice(0,300)}]);
+        setCoachLoading(false);return;
+      }
+      if(!res.ok){
+        setCoachMsgs([...newMsgs,{role:"assistant",content:"API error "+res.status+": "+(data&&data.error&&data.error.message?data.error.message:rawText.slice(0,300))}]);
+        setCoachLoading(false);return;
+      }
+      const reply=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"No response — please try again.";
       setCoachMsgs([...newMsgs,{role:"assistant",content:reply}]);
     }catch(e){
-      setCoachMsgs([...newMsgs,{role:"assistant",content:"Connection error: "+e.message}]);
+      setCoachMsgs([...newMsgs,{role:"assistant",content:"Error: "+e.name+" — "+e.message}]);
     }
     setCoachLoading(false);
     setTimeout(()=>chatEnd.current&&chatEnd.current.scrollIntoView({behavior:"smooth"}),100);
