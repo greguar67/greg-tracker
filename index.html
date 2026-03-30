@@ -296,25 +296,35 @@ function App(){
   async function searchFoodDB(query){
     if(!query||query.length<2){setDbResults([]);return;}
     setDbLoading(true);
-    try{
-      const offUrl="https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(query)+"&search_simple=1&action=process&json=1&page_size=8&fields=product_name,nutriments,brands";
-      const res=await fetch("https://corsproxy.io/?"+encodeURIComponent(offUrl));
-      const data=await res.json();
-      if(data.products&&data.products.length>0){
-        const results=data.products
-          .filter(p=>p.product_name)
-          .map(p=>({
-            name:(p.product_name+(p.brands?" ("+p.brands.split(",")[0]+")":"")).slice(0,50),
-            cals:Math.round(p.nutriments["energy-kcal_serving"]||p.nutriments["energy-kcal_100g"]||0),
-            p:Math.round(p.nutriments["proteins_serving"]||p.nutriments["proteins_100g"]||0),
-            c:Math.round(p.nutriments["carbohydrates_serving"]||p.nutriments["carbohydrates_100g"]||0),
-            f:Math.round(p.nutriments["fat_serving"]||p.nutriments["fat_100g"]||0),
-            cat:"Open Food Facts"
-          }))
-          .filter(p=>p.cals>0);
-        setDbResults(results.slice(0,8));
-      }else{setDbResults([]);}
-    }catch(e){setDbResults([]);}
+    const offUrl="https://world.openfoodfacts.org/cgi/search.pl?search_terms="+encodeURIComponent(query)+"&search_simple=1&action=process&json=1&page_size=8&fields=product_name,nutriments,brands";
+    const proxies=[
+      offUrl,
+      "https://corsproxy.io/?"+encodeURIComponent(offUrl),
+      "https://api.allorigins.win/raw?url="+encodeURIComponent(offUrl),
+    ];
+    let data=null;
+    for(const url of proxies){
+      try{
+        const res=await fetch(url,{headers:{"Accept":"application/json"}});
+        const text=await res.text();
+        const parsed=JSON.parse(text);
+        if(parsed.products){data=parsed;break;}
+      }catch(e){continue;}
+    }
+    if(data&&data.products&&data.products.length>0){
+      const results=data.products
+        .filter(p=>p.product_name)
+        .map(p=>({
+          name:(p.product_name+(p.brands?" ("+p.brands.split(",")[0]+")":"")).slice(0,50),
+          cals:Math.round(p.nutriments["energy-kcal_serving"]||p.nutriments["energy-kcal_100g"]||0),
+          p:Math.round(p.nutriments["proteins_serving"]||p.nutriments["proteins_100g"]||0),
+          c:Math.round(p.nutriments["carbohydrates_serving"]||p.nutriments["carbohydrates_100g"]||0),
+          f:Math.round(p.nutriments["fat_serving"]||p.nutriments["fat_100g"]||0),
+          cat:"Open Food Facts"
+        }))
+        .filter(p=>p.cals>0);
+      setDbResults(results.slice(0,8));
+    }else{setDbResults([]);}
     setDbLoading(false);
   }
 
@@ -330,23 +340,36 @@ function App(){
     }
     // Fall back to Open Food Facts API
     try{
-      const bUrl="https://world.openfoodfacts.org/api/v0/product/"+code.trim()+".json";
-      const res=await fetch("https://corsproxy.io/?"+encodeURIComponent(bUrl));
-      const data=await res.json();
-      if(data.status===1&&data.product){
-        const p=data.product;const n=p.nutriments||{};
-        const name=(p.product_name||p.abbreviated_product_name||("UPC "+code)).slice(0,60);
-        const cals=Math.round(n["energy-kcal_serving"]||n["energy-kcal_100g"]||0);
-        const protein=Math.round(n["proteins_serving"]||n["proteins_100g"]||0);
-        const carbs=Math.round(n["carbohydrates_serving"]||n["carbohydrates_100g"]||0);
-        const fat=Math.round(n["fat_serving"]||n["fat_100g"]||0);
-        setCName(name);setCCals(String(cals));setCP(String(protein));setCC(String(carbs));setCF(String(fat));
-        setBInput("");setBStatus("Found: "+name+" — review and tap Add Food");
-      }else{
-        setBStatus("Not found in database. Try name search or enter manually.");
-      }
-    }catch(e){
-      setBStatus("Lookup failed. Try name search or enter manually.");
+      // Check local DB first
+    const local=BARCODE_DB[code.trim()];
+    if(local){
+      setCName(local.name);setCCals(String(local.cals));setCP(String(local.p));setCC(String(local.c));setCF(String(local.f));
+      setBInput("");setBStatus("Found: "+local.name+" — tap Add Food");
+      setBLoading(false);return;
+    }
+    // Try Open Food Facts with proxy fallback
+    const bUrl="https://world.openfoodfacts.org/api/v0/product/"+code.trim()+".json";
+    const bProxies=[bUrl,"https://corsproxy.io/?"+encodeURIComponent(bUrl),"https://api.allorigins.win/raw?url="+encodeURIComponent(bUrl)];
+    let bData=null;
+    for(const url of bProxies){
+      try{
+        const res=await fetch(url);
+        const text=await res.text();
+        const parsed=JSON.parse(text);
+        if(parsed.status===1){bData=parsed;break;}
+      }catch(e){continue;}
+    }
+    if(bData&&bData.product){
+      const p=bData.product;const n=p.nutriments||{};
+      const name=(p.product_name||("UPC "+code)).slice(0,60);
+      const cals=Math.round(n["energy-kcal_serving"]||n["energy-kcal_100g"]||0);
+      const protein=Math.round(n["proteins_serving"]||n["proteins_100g"]||0);
+      const carbs=Math.round(n["carbohydrates_serving"]||n["carbohydrates_100g"]||0);
+      const fat=Math.round(n["fat_serving"]||n["fat_100g"]||0);
+      setCName(name);setCCals(String(cals));setCP(String(protein));setCC(String(carbs));setCF(String(fat));
+      setBInput("");setBStatus("Found: "+name+" — review and tap Add Food");
+    }else{
+      setBStatus("Not found. Use name search or enter manually.");
     }
     setBLoading(false);
   }
