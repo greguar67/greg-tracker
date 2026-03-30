@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0a0f1e">
 <title>Greg's Fat Loss Tracker</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.23.5/babel.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Georgia',serif;background:#0a0f1e;color:#e8e0d0;min-height:100vh;overflow-x:hidden}
@@ -22,7 +23,7 @@ body{font-family:'Georgia',serif;background:#0a0f1e;color:#e8e0d0;min-height:100
 <script type="text/babel">
 const {useState,useEffect,useRef} = React;
 
-// ─── DATA ────────────────────────────────────────────────────────────────────
+// --- DATA --------------------------------------------------------------------
 
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
@@ -31,7 +32,7 @@ const QUOTES = [
   {q:"It does not matter how slowly you go as long as you do not stop.",a:"Confucius"},
   {q:"Success is the sum of small efforts, repeated day in and day out.",a:"Robert Collier"},
   {q:"The body achieves what the mind believes.",a:"Napoleon Hill"},
-  {q:"Don't watch the clock. Do what it does — keep going.",a:"Sam Levenson"},
+  {q:"Don't watch the clock. Do what it does  -  keep going.",a:"Sam Levenson"},
   {q:"Take care of your body. It's the only place you have to live.",a:"Jim Rohn"},
   {q:"Rest when you're weary. Refresh and renew yourself.",a:"Ralph Marston"},
   {q:"You don't have to be great to start, but you have to start to be great.",a:"Zig Ziglar"},
@@ -73,26 +74,26 @@ const SCHEDULE = {
 const BURNS = {"Walk 1 mile":120,"Full Body Lift":320,"Stationary Bike 20 min":200,"Essentrics 20 min":80,"Essentrics (gentle)":60,"Swim 30 min":350};
 
 const BREAKFASTS = [
-  {name:"Mon & Thu — High Protein Scramble",cals:328,p:36,c:34,f:6,items:["6 egg whites + 1 whole egg","1 cup fresh spinach","1/4 cup diced red bell pepper","1/4 cup black beans (rinsed, stirred in)","1 slice Ezekiel bread (toasted)","Black pepper, garlic powder, hot sauce"]},
-  {name:"Tue & Fri — Greek Yogurt Power Bowl",cals:420,p:50,c:38,f:6,items:["1.5 cups 0% Fage plain Greek yogurt","1 scoop vanilla whey protein (stirred in)","1/2 cup fresh blueberries","1 tbsp chia seeds","1 tbsp raw honey","Dash cinnamon"]},
-  {name:"Wed & Sat — Cottage Cheese Pancakes",cals:370,p:36,c:38,f:9,items:["Blend: 1/2 cup cottage cheese + 1/2 cup oats + 2 eggs + 1 tsp vanilla + 1/2 tsp cinnamon","Cook on medium heat 3 min each side","Top: 1/2 cup fresh raspberries + 1 tbsp light maple syrup"]},
-  {name:"Sunday — Southwest Egg Burrito",cals:390,p:42,c:32,f:10,items:["5 egg whites + 1 whole egg scrambled","1 whole wheat tortilla (warmed)","2 tbsp black beans (rinsed)","1/4 cup fresh salsa","1 oz reduced-fat Mexican cheese","Fresh cilantro"]},
+  {name:"Mon & Thu  -  High Protein Scramble",cals:328,p:36,c:34,f:6,items:["6 egg whites + 1 whole egg","1 cup fresh spinach","1/4 cup diced red bell pepper","1/4 cup black beans (rinsed, stirred in)","1 slice Ezekiel bread (toasted)","Black pepper, garlic powder, hot sauce"]},
+  {name:"Tue & Fri  -  Greek Yogurt Power Bowl",cals:420,p:50,c:38,f:6,items:["1.5 cups 0% Fage plain Greek yogurt","1 scoop vanilla whey protein (stirred in)","1/2 cup fresh blueberries","1 tbsp chia seeds","1 tbsp raw honey","Dash cinnamon"]},
+  {name:"Wed & Sat  -  Cottage Cheese Pancakes",cals:370,p:36,c:38,f:9,items:["Blend: 1/2 cup cottage cheese + 1/2 cup oats + 2 eggs + 1 tsp vanilla + 1/2 tsp cinnamon","Cook on medium heat 3 min each side","Top: 1/2 cup fresh raspberries + 1 tbsp light maple syrup"]},
+  {name:"Sunday  -  Southwest Egg Burrito",cals:390,p:42,c:32,f:10,items:["5 egg whites + 1 whole egg scrambled","1 whole wheat tortilla (warmed)","2 tbsp black beans (rinsed)","1/4 cup fresh salsa","1 oz reduced-fat Mexican cheese","Fresh cilantro"]},
   {name:"Smoked Salmon Avocado Toast",cals:410,p:38,c:30,f:14,items:["2 slices Ezekiel bread","3 oz smoked salmon","2 tbsp blended avocado","Sliced cucumber & tomato","Everything bagel seasoning","Squeeze of lemon"]},
   {name:"Overnight Oats + Protein",cals:400,p:40,c:50,f:11,items:["1/2 cup rolled oats","1/2 cup almond milk","1 scoop protein powder","1 tbsp chia seeds","1/2 banana","1 tbsp peanut butter"]},
 ];
 const LUNCHES = [
-  {name:"MWF — Tuna Power Salad",cals:420,p:48,c:28,f:14,items:["2 cans Starkist tuna in water (drained)","3 cups mixed greens","1/2 cup chickpeas (rinsed)","1 cup cherry tomatoes","1/2 cucumber sliced","1/4 red onion sliced thin","Dressing: 1 tbsp olive oil + juice of 1 lemon + 1 tsp Dijon + black pepper"]},
-  {name:"TThSat — Chicken Quinoa Bowl",cals:460,p:52,c:40,f:10,items:["6 oz grilled chicken breast (garlic powder, smoked paprika, cumin, black pepper)","1/2 cup cooked quinoa","1 cup roasted broccoli (400°F 20 min)","1/2 cup shredded carrots","2 tbsp hummus on the side","Squeeze of lemon + fresh parsley"]},
-  {name:"Sunday — Turkey White Bean Soup",cals:410,p:46,c:36,f:8,items:["5 oz lean ground turkey (browned)","1/2 cup white cannellini beans","2 cups low-sodium chicken broth","1/2 cup diced carrots, celery, onion","2 cloves garlic minced","Fresh thyme + rosemary + bay leaf","1 slice Ezekiel bread on the side"]},
+  {name:"MWF  -  Tuna Power Salad",cals:420,p:48,c:28,f:14,items:["2 cans Starkist tuna in water (drained)","3 cups mixed greens","1/2 cup chickpeas (rinsed)","1 cup cherry tomatoes","1/2 cucumber sliced","1/4 red onion sliced thin","Dressing: 1 tbsp olive oil + juice of 1 lemon + 1 tsp Dijon + black pepper"]},
+  {name:"TThSat  -  Chicken Quinoa Bowl",cals:460,p:52,c:40,f:10,items:["6 oz grilled chicken breast (garlic powder, smoked paprika, cumin, black pepper)","1/2 cup cooked quinoa","1 cup roasted broccoli (400F 20 min)","1/2 cup shredded carrots","2 tbsp hummus on the side","Squeeze of lemon + fresh parsley"]},
+  {name:"Sunday  -  Turkey White Bean Soup",cals:410,p:46,c:36,f:8,items:["5 oz lean ground turkey (browned)","1/2 cup white cannellini beans","2 cups low-sodium chicken broth","1/2 cup diced carrots, celery, onion","2 cloves garlic minced","Fresh thyme + rosemary + bay leaf","1 slice Ezekiel bread on the side"]},
 ];
 const DINNERS = [
-  {name:"Monday — Sheet Pan Salmon & Asparagus",cals:530,p:54,c:36,f:16,items:["7 oz wild salmon fillet","1 bunch asparagus (ends snapped)","1 cup cherry tomatoes","1 tbsp olive oil + 3 minced garlic cloves + lemon zest","Fresh dill + capers + lemon wedge","1/2 cup cooked quinoa on the side","400°F for 18 minutes on one sheet pan"]},
-  {name:"Tuesday — Turkey Taco Bowl",cals:510,p:52,c:46,f:12,items:["6 oz lean ground turkey (cumin, chili powder, garlic powder, oregano)","1/2 cup brown rice (base)","1/4 cup black beans (rinsed)","Shredded romaine + diced tomato + jalapeño","2 tbsp fresh salsa + 1 tbsp 0% Greek yogurt","Fresh lime + cilantro — bowl only, no tortilla"]},
-  {name:"Wednesday — Baked Chicken Parmesan",cals:520,p:58,c:28,f:16,items:["8 oz chicken breast (butterflied thin)","Coat: 2 tbsp whole wheat breadcrumbs + 1 tbsp Parmesan + garlic powder","Bake 425°F 22 min — broil last 3 min","1/2 cup Rao's marinara + 1 oz part-skim mozzarella melted","2 cups zucchini noodles (sauté 3 min)","Large side salad: romaine, cucumber, tomato, 1 tbsp light Italian"]},
-  {name:"Thursday — Garlic Shrimp & Cauliflower Rice",cals:500,p:52,c:18,f:20,items:["8 oz large shrimp (peeled, deveined)","3 cups cauliflower rice (squeeze dry)","5 garlic cloves minced + 1 tbsp olive oil + 1 tbsp butter","1 cup cherry tomatoes halved","Fresh parsley + lemon juice + red pepper flakes"]},
-  {name:"Friday — Mahi Mahi Fish Tacos",cals:490,p:48,c:42,f:14,items:["7 oz mahi mahi (chili-lime rub — grill 4 min/side)","2 corn tortillas (warmed)","1 cup purple cabbage shredded + lime juice","Mango salsa: 1/2 mango + jalapeño + red onion + cilantro + lime","Sauce: 2 tbsp 0% Greek yogurt + 1 tsp sriracha + lime zest"]},
-  {name:"Saturday — Smash Burger Night",cals:520,p:50,c:42,f:16,items:["6 oz 93% lean ground beef (two 3 oz patties, smash on hot cast iron 2 min/side)","1 whole wheat thin bun","Romaine + tomato + red onion + pickles + 1 oz reduced-fat cheddar","Sauce: 1 tsp light mayo + 1 tsp mustard + 1 tsp ketchup","Side: 1 medium sweet potato wedges, air fry 400°F 20 min"]},
-  {name:"Sunday — Turkey Stuffed Bell Peppers",cals:460,p:50,c:34,f:12,items:["6 oz lean ground turkey + 1/4 cup brown rice + 1/2 cup Rao's marinara","1/4 cup diced onion + 2 cloves garlic + oregano + basil","Fill 3 large bell pepper halves","Top: 1 oz reduced-fat mozzarella","375°F covered 35 min, uncovered 10 min"]},
+  {name:"Monday  -  Sheet Pan Salmon & Asparagus",cals:530,p:54,c:36,f:16,items:["7 oz wild salmon fillet","1 bunch asparagus (ends snapped)","1 cup cherry tomatoes","1 tbsp olive oil + 3 minced garlic cloves + lemon zest","Fresh dill + capers + lemon wedge","1/2 cup cooked quinoa on the side","400F for 18 minutes on one sheet pan"]},
+  {name:"Tuesday  -  Turkey Taco Bowl",cals:510,p:52,c:46,f:12,items:["6 oz lean ground turkey (cumin, chili powder, garlic powder, oregano)","1/2 cup brown rice (base)","1/4 cup black beans (rinsed)","Shredded romaine + diced tomato + jalapeno","2 tbsp fresh salsa + 1 tbsp 0% Greek yogurt","Fresh lime + cilantro  -  bowl only, no tortilla"]},
+  {name:"Wednesday  -  Baked Chicken Parmesan",cals:520,p:58,c:28,f:16,items:["8 oz chicken breast (butterflied thin)","Coat: 2 tbsp whole wheat breadcrumbs + 1 tbsp Parmesan + garlic powder","Bake 425F 22 min  -  broil last 3 min","1/2 cup Rao's marinara + 1 oz part-skim mozzarella melted","2 cups zucchini noodles (saute 3 min)","Large side salad: romaine, cucumber, tomato, 1 tbsp light Italian"]},
+  {name:"Thursday  -  Garlic Shrimp & Cauliflower Rice",cals:500,p:52,c:18,f:20,items:["8 oz large shrimp (peeled, deveined)","3 cups cauliflower rice (squeeze dry)","5 garlic cloves minced + 1 tbsp olive oil + 1 tbsp butter","1 cup cherry tomatoes halved","Fresh parsley + lemon juice + red pepper flakes"]},
+  {name:"Friday  -  Mahi Mahi Fish Tacos",cals:490,p:48,c:42,f:14,items:["7 oz mahi mahi (chili-lime rub  -  grill 4 min/side)","2 corn tortillas (warmed)","1 cup purple cabbage shredded + lime juice","Mango salsa: 1/2 mango + jalapeno + red onion + cilantro + lime","Sauce: 2 tbsp 0% Greek yogurt + 1 tsp sriracha + lime zest"]},
+  {name:"Saturday  -  Smash Burger Night",cals:520,p:50,c:42,f:16,items:["6 oz 93% lean ground beef (two 3 oz patties, smash on hot cast iron 2 min/side)","1 whole wheat thin bun","Romaine + tomato + red onion + pickles + 1 oz reduced-fat cheddar","Sauce: 1 tsp light mayo + 1 tsp mustard + 1 tsp ketchup","Side: 1 medium sweet potato wedges, air fry 400F 20 min"]},
+  {name:"Sunday  -  Turkey Stuffed Bell Peppers",cals:460,p:50,c:34,f:12,items:["6 oz lean ground turkey + 1/4 cup brown rice + 1/2 cup Rao's marinara","1/4 cup diced onion + 2 cloves garlic + oregano + basil","Fill 3 large bell pepper halves","Top: 1 oz reduced-fat mozzarella","375F covered 35 min, uncovered 10 min"]},
 ];
 const SNACKS = [
   {name:"Daily Protein Shake",cals:150,p:30,c:6,f:2},
@@ -272,7 +273,7 @@ function App(){
     if(Object.keys(updates).length>0)setDays(p=>({...p,...updates}));
   },[weekOff]);
 
-  function flash(ok){setSaveMsg(ok?"✓ Saved":"⚠ Error");if(saveTimer.current)clearTimeout(saveTimer.current);saveTimer.current=setTimeout(()=>setSaveMsg(""),2000);}
+  function flash(ok){setSaveMsg(ok?"v Saved":"! Error");if(saveTimer.current)clearTimeout(saveTimer.current);saveTimer.current=setTimeout(()=>setSaveMsg(""),2000);}
   function saveDay(key,data){flash(sSet("day:"+key,data));}
   function upDay(fn){const cur=days[dayKey]||emptyDay(dayName);const next=fn(cur);setDays(p=>({...p,[dayKey]:next}));saveDay(dayKey,next);}
   function togAct(a){upDay(d=>({...d,acts:{...d.acts,[a]:!d.acts[a]}}))}
@@ -330,23 +331,12 @@ function App(){
   async function lookupBarcode(code){
     if(!code)return;
     setBLoading(true);setBStatus("Looking up "+code+"...");
-    // Check local DB first for instant response
     const local=BARCODE_DB[code.trim()];
     if(local){
       setCName(local.name);setCCals(String(local.cals));setCP(String(local.p));setCC(String(local.c));setCF(String(local.f));
-      setBInput("");setBStatus("Found: "+local.name+" — tap Add Food");
+      setBInput("");setBStatus("Found: "+local.name+" - tap Add Food");
       setBLoading(false);return;
     }
-    // Fall back to Open Food Facts API
-    try{
-      // Check local DB first
-    const local=BARCODE_DB[code.trim()];
-    if(local){
-      setCName(local.name);setCCals(String(local.cals));setCP(String(local.p));setCC(String(local.c));setCF(String(local.f));
-      setBInput("");setBStatus("Found: "+local.name+" — tap Add Food");
-      setBLoading(false);return;
-    }
-    // Try Open Food Facts with proxy fallback
     const bUrl="https://world.openfoodfacts.org/api/v0/product/"+code.trim()+".json";
     const bProxies=[bUrl,"https://corsproxy.io/?"+encodeURIComponent(bUrl),"https://api.allorigins.win/raw?url="+encodeURIComponent(bUrl)];
     let bData=null;
@@ -366,7 +356,7 @@ function App(){
       const carbs=Math.round(n["carbohydrates_serving"]||n["carbohydrates_100g"]||0);
       const fat=Math.round(n["fat_serving"]||n["fat_100g"]||0);
       setCName(name);setCCals(String(cals));setCP(String(protein));setCC(String(carbs));setCF(String(fat));
-      setBInput("");setBStatus("Found: "+name+" — review and tap Add Food");
+      setBInput("");setBStatus("Found: "+name+" - review and tap Add Food");
     }else{
       setBStatus("Not found. Use name search or enter manually.");
     }
@@ -405,7 +395,7 @@ function App(){
       setDays(updates);
       const wl=sGet("weightlog");if(wl)setWLog(wl);
       const sf=sGet("saved-foods");if(sf)setSavedFoods(sf);
-    }catch{setImportMsg("Import failed — make sure you pasted the full backup text.");}
+    }catch{setImportMsg("Import failed  -  make sure you pasted the full backup text.");}
   }
 
   const dd=days[dayKey]||emptyDay(dayName);
@@ -434,7 +424,7 @@ function App(){
   async function sendCoach(q){
     const msg=(q||coachInput).trim();if(!msg)return;
     if(!apiKey){
-      setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:"Please add your Anthropic API key above to activate the coach. Get one free at console.anthropic.com → API Keys → Create Key."}]);
+      setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:"Please add your Anthropic API key above to activate the coach. Get one free at console.anthropic.com -> API Keys -> Create Key."}]);
       setCoachInput("");return;
     }
     // Morning check-in
@@ -444,11 +434,11 @@ function App(){
       const daySchedule=SCHEDULE[dayName];
       const isLift=daySchedule.intensity==="HIGH";
       const isSwim=daySchedule.acts.some(a=>a.includes("Swim"));
-      const workoutType=isLift?"lifting day — bike warm-up first, then all 10 machines":isSwim?"swim day — 45 minutes, intervals":dayName==="Sunday"?"rest day — walk, bike, and Essentrics only":"active day";
+      const workoutType=isLift?"lifting day  -  bike warm-up first, then all 10 machines":isSwim?"swim day  -  45 minutes, intervals":dayName==="Sunday"?"rest day  -  walk, bike, and Essentrics only":"active day";
       const bfNames={"Monday":"High Protein Scramble","Tuesday":"Greek Yogurt Power Bowl","Wednesday":"Cottage Cheese Pancakes","Thursday":"High Protein Scramble","Friday":"Greek Yogurt Power Bowl","Saturday":"Cottage Cheese Pancakes","Sunday":"Southwest Egg Burrito"};
       const lunchNames={"Monday":"Tuna Power Salad","Tuesday":"Chicken Quinoa Bowl","Wednesday":"Tuna Power Salad","Thursday":"Chicken Quinoa Bowl","Friday":"Tuna Power Salad","Saturday":"Chicken Quinoa Bowl","Sunday":"Turkey White Bean Soup"};
       const dinnerNames={"Monday":"Sheet Pan Salmon & Asparagus","Tuesday":"Turkey Taco Bowl","Wednesday":"Baked Chicken Parmesan","Thursday":"Garlic Shrimp & Cauliflower Rice","Friday":"Mahi Mahi Fish Tacos","Saturday":"Smash Burger Night","Sunday":"Turkey Stuffed Bell Peppers"};
-      const morningMsg="Good morning Greg. Today is "+dayName+". "+(lat?"You are at "+lat+" lbs — down "+lost+" lbs from 280. ":"Log your weight first thing. ")+"Here is your day: Breakfast is "+bfNames[dayName]+". Today is a "+workoutType+". Lunch: "+lunchNames[dayName]+". Snack: protein shake at 3 PM. Dinner: "+dinnerNames[dayName]+". Evening bike at 7 PM, Essentrics at 7:25 PM, AA meeting after. Gratitude prayer at 9 PM, in bed by 9:30. Say your morning prayer, drink your water, and go. One day at a time Greg. Let's go.";
+      const morningMsg="Good morning Greg. Today is "+dayName+". "+(lat?"You are at "+lat+" lbs  -  down "+lost+" lbs from 280. ":"Log your weight first thing. ")+"Here is your day: Breakfast is "+bfNames[dayName]+". Today is a "+workoutType+". Lunch: "+lunchNames[dayName]+". Snack: protein shake at 3 PM. Dinner: "+dinnerNames[dayName]+". Evening bike at 7 PM, Essentrics at 7:25 PM, AA meeting after. Gratitude prayer at 9 PM, in bed by 9:30. Say your morning prayer, drink your water, and go. One day at a time Greg. Let's go.";
       setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:morningMsg}]);
       setCoachInput("");
       return;
@@ -458,8 +448,8 @@ function App(){
       const pct=acts.length>0?Math.round(actsDone/acts.length*100):0;
       const waterDone=dd.water>=WATER_GOAL;
       const score=[pct>=80,mealsDone>=3,deficit>=800,waterDone].filter(Boolean).length;
-      const grade=score===4?"Perfect execution today Greg. Every box checked. This is exactly how May 5th gets built — one flawless day at a time.":score===3?"Strong day Greg. Three out of four pillars solid. Identify the one gap and close it tomorrow.":score===2?"Decent effort but the plan demands more. Review what slipped today and recommit tonight before you sleep.":"Today was a reset day Greg. That is okay — one day does not break a 35-day plan. But tomorrow has to be different. Say your gratitude prayer, get to bed, and start clean at 5:45 AM.";
-      const eveningMsg=grade+" Here is your scorecard: Activities "+actsDone+"/"+acts.length+" ("+pct+"%). Meals logged: "+mealsDone+"/4. Calorie deficit today: "+deficit+" cal. Water: "+(dd.water*8)+"/130oz. This week total deficit: "+wkTot.deficit+" cal — that is "+(wkTot.deficit/3500).toFixed(1)+" lbs of fat. "+(deficit>0?"Good deficit today. ":"Log your meals if you haven't — the tracker needs that data. ")+"Say your gratitude prayer. Name three specific things from today. Then get to sleep — 9:30 PM lights out. You need those 8 hours. See you at 5:45 AM.";
+      const grade=score===4?"Perfect execution today Greg. Every box checked. This is exactly how May 5th gets built  -  one flawless day at a time.":score===3?"Strong day Greg. Three out of four pillars solid. Identify the one gap and close it tomorrow.":score===2?"Decent effort but the plan demands more. Review what slipped today and recommit tonight before you sleep.":"Today was a reset day Greg. That is okay  -  one day does not break a 35-day plan. But tomorrow has to be different. Say your gratitude prayer, get to bed, and start clean at 5:45 AM.";
+      const eveningMsg=grade+" Here is your scorecard: Activities "+actsDone+"/"+acts.length+" ("+pct+"%). Meals logged: "+mealsDone+"/4. Calorie deficit today: "+deficit+" cal. Water: "+(dd.water*8)+"/130oz. This week total deficit: "+wkTot.deficit+" cal  -  that is "+(wkTot.deficit/3500).toFixed(1)+" lbs of fat. "+(deficit>0?"Good deficit today. ":"Log your meals if you haven't  -  the tracker needs that data. ")+"Say your gratitude prayer. Name three specific things from today. Then get to sleep  -  9:30 PM lights out. You need those 8 hours. See you at 5:45 AM.";
       setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:eveningMsg}]);
       setCoachInput("");
       return;
@@ -469,7 +459,7 @@ function App(){
     const avgDef=wkTot.deficit>0?wkTot.deficit/7:1000;
     const rem=lat?lat-175:105;
     const wksLeft=Math.round(rem*3500/avgDef/7);
-    const sys="You are a warm, direct, knowledgeable personal coach for Greg. Here is everything about him: He is 5ft 10in, started at 280 lbs, currently "+(lat||280)+" lbs, lost "+lost+" lbs so far, goal is 175 lbs. He has occasional left knee and right foot inflammation. He is in AA recovery — acknowledge that strength when relevant. Today is "+dayName+". Activities completed: "+actsDone+"/"+acts.length+". Calories eaten: "+tCals+". Exercise burned: "+burned+" cal. Calorie deficit today: "+deficit+" cal. Water: "+(dd.water*8)+"/104oz. This week deficit: "+wkTot.deficit+" cal (~"+(wkTot.deficit/3500).toFixed(1)+" lbs). Estimated weeks to goal at current pace: "+wksLeft+". His plan: walk 1 mile daily, stationary bike 20 min daily, Essentrics nightly, meditation daily, AA meeting daily, call sponsor daily. Lift Mon/Wed/Fri, swim Tue/Thu/Sat. Target 1,800 cal/day, 180g protein. Keep responses warm, direct, 2-3 short paragraphs. Use his name occasionally.";
+    const sys="You are a warm, direct, knowledgeable personal coach for Greg. Here is everything about him: He is 5ft 10in, started at 280 lbs, currently "+(lat||280)+" lbs, lost "+lost+" lbs so far, goal is 175 lbs. He has occasional left knee and right foot inflammation. He is in AA recovery  -  acknowledge that strength when relevant. Today is "+dayName+". Activities completed: "+actsDone+"/"+acts.length+". Calories eaten: "+tCals+". Exercise burned: "+burned+" cal. Calorie deficit today: "+deficit+" cal. Water: "+(dd.water*8)+"/104oz. This week deficit: "+wkTot.deficit+" cal (~"+(wkTot.deficit/3500).toFixed(1)+" lbs). Estimated weeks to goal at current pace: "+wksLeft+". His plan: walk 1 mile daily, stationary bike 20 min daily, Essentrics nightly, meditation daily, AA meeting daily, call sponsor daily. Lift Mon/Wed/Fri, swim Tue/Thu/Sat. Target 1,800 cal/day, 180g protein. Keep responses warm, direct, 2-3 short paragraphs. Use his name occasionally.";
     const newMsgs=[...coachMsgs,{role:"user",content:msg}];
     setCoachMsgs(newMsgs);setCoachInput("");setCoachLoading(true);
     setTimeout(()=>chatEnd.current&&chatEnd.current.scrollIntoView({behavior:"smooth"}),100);
@@ -498,14 +488,14 @@ function App(){
           let data;
           try{data=JSON.parse(rawText);}catch(e){lastError="Parse error: "+rawText.slice(0,100);continue;}
           if(!res.ok||data.error){lastError="API error: "+(data&&data.error&&data.error.message?data.error.message:res.status);continue;}
-          const reply=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"No response — please try again.";
+          const reply=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:"No response  -  please try again.";
           setCoachMsgs([...newMsgs,{role:"assistant",content:reply}]);
           replied=true;break;
         }catch(e){lastError=e.message;continue;}
       }
       if(!replied){setCoachMsgs([...newMsgs,{role:"assistant",content:"Could not connect to coach. Error: "+lastError+". Please check your internet connection and try again."}]);}
     }catch(e){
-      setCoachMsgs([...newMsgs,{role:"assistant",content:"Error: "+e.name+" — "+e.message}]);
+      setCoachMsgs([...newMsgs,{role:"assistant",content:"Error: "+e.name+"  -  "+e.message}]);
     }
     setCoachLoading(false);
     setTimeout(()=>chatEnd.current&&chatEnd.current.scrollIntoView({behavior:"smooth"}),100);
@@ -535,7 +525,7 @@ function App(){
   );}
   function Cb({checked,onChange}){return(
     <div onClick={onChange} style={{width:22,height:22,borderRadius:6,border:"2px solid "+(checked?"#22c55e":"#3a4a6a"),background:checked?"#22c55e":dark,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",transition:"all .2s"}}>
-      {checked&&<span style={{color:dark,fontSize:13,fontWeight:900}}>✓</span>}
+      {checked&&<span style={{color:dark,fontSize:13,fontWeight:900}}>v</span>}
     </div>
   );}
   function Bar({pct,color,h=6}){return(
@@ -555,8 +545,8 @@ function App(){
       <div style={s.header}>
         <div style={{maxWidth:680,margin:"0 auto"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
-            <div style={{...s.mono,fontSize:10,letterSpacing:3,color:gold,textTransform:"uppercase"}}>280 lbs to 175 lbs · Mar 16 2026</div>
-            {saveMsg&&<div style={{...s.mono,fontSize:11,color:saveMsg.includes("✓")?"#22c55e":"#ef4444",fontWeight:700}}>{saveMsg}</div>}
+            <div style={{...s.mono,fontSize:10,letterSpacing:3,color:gold,textTransform:"uppercase"}}>280 lbs to 175 lbs . Mar 16 2026</div>
+            {saveMsg&&<div style={{...s.mono,fontSize:11,color:saveMsg.includes("v")?"#22c55e":"#ef4444",fontWeight:700}}>{saveMsg}</div>}
           </div>
           <h1 style={{...s.playfair,fontSize:"clamp(20px,5vw,32px)",fontWeight:900,lineHeight:1.1}}>Daily <span style={{color:gold}}>Fat Loss Tracker</span></h1>
         </div>
@@ -568,7 +558,7 @@ function App(){
 
       <div style={s.content}>
 
-        {/* ══ TRACKER ══ */}
+        {/* == TRACKER == */}
         {tab==="tracker"&&(
           <div style={{paddingTop:14}}>
             {/* Week nav */}
@@ -576,7 +566,7 @@ function App(){
               <button onClick={()=>{setWeekOff(w=>Math.max(0,w-1));setSelDay(0);}} disabled={weekOff===0} style={{background:"none",border:"1px solid #2a3050",color:weekOff===0?"#2a3050":gold,borderRadius:8,width:36,height:36,cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center"}}>&#8249;</button>
               <div style={{textAlign:"center"}}>
                 <div style={{...s.mono,fontSize:12,color:gold,letterSpacing:2,fontWeight:700}}>WEEK {weekOff+1}</div>
-                <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginTop:2}}>{fmt(gwk(weekOff))} — {fmt(gdd(gwk(weekOff),6))}</div>
+                <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginTop:2}}>{fmt(gwk(weekOff))}  -  {fmt(gdd(gwk(weekOff),6))}</div>
               </div>
               <button onClick={()=>{setWeekOff(w=>w+1);setSelDay(0);}} style={{background:"none",border:"1px solid #2a3050",color:gold,borderRadius:8,width:36,height:36,cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center"}}>&#8250;</button>
             </div>
@@ -587,7 +577,7 @@ function App(){
                 const k=dk(gdd(ws,i));const d=days[k]||emptyDay(dn);
                 const done=SCHEDULE[dn].acts.filter(a=>d.acts?.[a]).length;
                 return<button key={dn} onClick={()=>setSelDay(i)} style={{background:selDay===i?"#c8a96e22":"none",border:"1px solid "+(selDay===i?gold:"#2a3050"),color:selDay===i?gold:"#7a8aaa",padding:"6px 12px",borderRadius:20,cursor:"pointer",...s.mono,fontSize:11,letterSpacing:1,whiteSpace:"nowrap",flexShrink:0}}>
-                  {dn.slice(0,3)}{done>0&&<span style={{marginLeft:4,color:"#22c55e"}}>●</span>}
+                  {dn.slice(0,3)}{done>0&&<span style={{marginLeft:4,color:"#22c55e"}}>*</span>}
                 </button>;
               })}
             </div>
@@ -609,7 +599,7 @@ function App(){
             <div style={{background:"linear-gradient(135deg,#1a1f35,#0f1828)",border:"1px solid #c8a96e33",borderRadius:12,padding:"12px 14px",marginBottom:12,position:"relative",overflow:"hidden"}}>
               <div style={{position:"absolute",top:-8,right:4,fontSize:44,opacity:.05,lineHeight:1}}>"</div>
               <div style={{...s.playfair,fontSize:13,lineHeight:1.6,color:"#d4c9b0",fontStyle:"italic",marginBottom:4}}>"{QUOTES[(dayDate.getDate()-1)%QUOTES.length].q}"</div>
-              <div style={{...s.mono,fontSize:10,color:gold}}>— {QUOTES[(dayDate.getDate()-1)%QUOTES.length].a}</div>
+              <div style={{...s.mono,fontSize:10,color:gold}}> -  {QUOTES[(dayDate.getDate()-1)%QUOTES.length].a}</div>
             </div>
 
             {/* Macros */}
@@ -665,15 +655,15 @@ function App(){
               {[["Breakfast","breakfast",BREAKFASTS],["Lunch","lunch",LUNCHES],["Dinner","dinner",DINNERS]].map(([lbl,type,items])=>(
                 <div key={type} style={{marginBottom:14}}>
                   <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-                    <span style={{fontWeight:700,fontSize:13}}>{type==="breakfast"?"🌅":"type"==="lunch"?"☀️":"🌙"} {lbl}</span>
-                    {dd[type]&&<span style={{color:"#22c55e",fontSize:11,...s.mono}}>✓ logged</span>}
+                    <span style={{fontWeight:700,fontSize:13}}>{type==="breakfast"?"":"type"==="lunch"?"":""} {lbl}</span>
+                    {dd[type]&&<span style={{color:"#22c55e",fontSize:11,...s.mono}}>v logged</span>}
                   </div>
                   {items.map(m=>(
                     <div key={m.name} onClick={()=>setMeal(type,m.name)} style={{cursor:"pointer",border:"1px solid "+(dd[type]===m.name?"#22c55e":border),borderRadius:10,padding:"10px 12px",background:dd[type]===m.name?"#0d1f12":"#0d1422",transition:"all .2s",marginBottom:6}}>
                       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
                         <div style={{display:"flex",alignItems:"center",gap:8}}>
                           <div style={{width:18,height:18,borderRadius:5,border:"2px solid "+(dd[type]===m.name?"#22c55e":"#3a4a6a"),background:dd[type]===m.name?"#22c55e":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                            {dd[type]===m.name&&<span style={{color:dark,fontSize:10,fontWeight:900}}>✓</span>}
+                            {dd[type]===m.name&&<span style={{color:dark,fontSize:10,fontWeight:900}}>v</span>}
                           </div>
                           <span style={{fontSize:13}}>{m.name}</span>
                         </div>
@@ -688,15 +678,15 @@ function App(){
               ))}
               <div>
                 <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-                  <span style={{fontWeight:700,fontSize:13}}>🍎 Snack</span>
-                  {dd.snack&&<span style={{color:"#22c55e",fontSize:11,...s.mono}}>✓ logged</span>}
+                  <span style={{fontWeight:700,fontSize:13}}> Snack</span>
+                  {dd.snack&&<span style={{color:"#22c55e",fontSize:11,...s.mono}}>v logged</span>}
                 </div>
                 <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
                   {SNACKS.map(sn=>(
                     <div key={sn.name} onClick={()=>setMeal("snack",sn.name)} style={{cursor:"pointer",border:"1px solid "+(dd.snack===sn.name?"#22c55e":border),borderRadius:8,padding:"8px 10px",background:dd.snack===sn.name?"#0d1f12":"#0d1422",transition:"all .2s",flex:"1 1 140px"}}>
                       <div style={{display:"flex",alignItems:"center",gap:8}}>
                         <div style={{width:16,height:16,borderRadius:4,border:"2px solid "+(dd.snack===sn.name?"#22c55e":"#3a4a6a"),background:dd.snack===sn.name?"#22c55e":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                          {dd.snack===sn.name&&<span style={{color:dark,fontSize:9,fontWeight:900}}>✓</span>}
+                          {dd.snack===sn.name&&<span style={{color:dark,fontSize:9,fontWeight:900}}>v</span>}
                         </div>
                         <span style={{fontSize:12}}>{sn.name}</span>
                       </div>
@@ -738,11 +728,11 @@ function App(){
                   placeholder="Search any food (chicken, Quest Bar, Chobani...)"
                   style={{background:"#0d1422",border:"1px solid #2a3050",color:"#e8e0d0",padding:"9px 12px",paddingRight:32,borderRadius:8,fontFamily:"DM Mono,monospace",fontSize:13,outline:"none",width:"100%"}}
                 />
-                <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:13,color:"#7a8aaa",pointerEvents:"none"}}>🔍</span>
+                <span style={{position:"absolute",right:10,top:"50%",transform:"translateY(-50%)",fontSize:13,color:"#7a8aaa",pointerEvents:"none"}}></span>
                 {showDB&&foodSearch.length>0&&(()=>{
                   const localResults=[...savedFoods,...FOOD_DB].filter(f=>f.name.toLowerCase().includes(foodSearch.toLowerCase())).slice(0,4);
                   const allResults=[...localResults,...dbResults.filter(d=>!localResults.find(l=>l.name.toLowerCase()===d.name.toLowerCase()))];
-                  if(allResults.length===0&&!dbLoading)return<div style={{background:card,border:"1px solid #c8a96e44",borderRadius:8,padding:12,marginTop:4,fontSize:12,color:"#7a8aaa",...s.mono}}>No matches — try a different search</div>;
+                  if(allResults.length===0&&!dbLoading)return<div style={{background:card,border:"1px solid #c8a96e44",borderRadius:8,padding:12,marginTop:4,fontSize:12,color:"#7a8aaa",...s.mono}}>No matches  -  try a different search</div>;
                   return(
                     <div style={{background:card,border:"1px solid #c8a96e44",borderRadius:8,marginTop:4,overflow:"hidden",maxHeight:320,overflowY:"auto",position:"absolute",zIndex:100,width:"100%",boxShadow:"0 8px 32px #00000088"}}>
                       {dbLoading&&<div style={{padding:"10px 12px",fontSize:11,color:"#c8a96e",...s.mono,borderBottom:"1px solid "+border}}>Searching Open Food Facts...</div>}
@@ -764,7 +754,7 @@ function App(){
                         </div>
                       ))}
                       <div style={{padding:"7px 12px",fontSize:10,color:"#3a4a6a",...s.mono,borderTop:"1px solid "+border}}>
-                        {savedFoods.length} saved · {FOOD_DB.length} built-in · millions via Open Food Facts
+                        {savedFoods.length} saved . {FOOD_DB.length} built-in . millions via Open Food Facts
                       </div>
                     </div>
                   );
@@ -795,7 +785,7 @@ function App(){
                       <div style={{display:"flex",alignItems:"center",gap:8}}>
                         <span style={{...s.mono,fontSize:12,color:gold}}>{f.cals} cal</span>
                         <button onClick={()=>selFood(f)} style={{background:"#1e2a40",border:"none",color:gold,borderRadius:6,padding:"4px 10px",cursor:"pointer",...s.mono,fontSize:11}}>Use</button>
-                        <button onClick={()=>delSaved(f.name)} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",fontSize:15,padding:"2px 6px",borderRadius:4}}>✕</button>
+                        <button onClick={()=>delSaved(f.name)} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",fontSize:15,padding:"2px 6px",borderRadius:4}}>x</button>
                       </div>
                     </div>
                   ))}
@@ -810,7 +800,7 @@ function App(){
                       <div><div style={{fontSize:13}}>{f.name}</div><div style={{...s.mono,fontSize:10,color:"#7a8aaa"}}>P:{f.p}g C:{f.c}g F:{f.f}g</div></div>
                       <div style={{display:"flex",alignItems:"center",gap:8}}>
                         <span style={{...s.mono,fontSize:12,color:gold}}>{f.cals} cal</span>
-                        <button onClick={()=>delCustom(f.id)} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",fontSize:15,padding:"2px 6px"}}>✕</button>
+                        <button onClick={()=>delCustom(f.id)} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",fontSize:15,padding:"2px 6px"}}>x</button>
                       </div>
                     </div>
                   ))}
@@ -827,11 +817,11 @@ function App(){
               <div style={{marginBottom:10}}><Bar pct={Math.round(dd.water/WATER_GOAL*100)} color={dd.water>=WATER_GOAL?"#22c55e":"#3b82f6"} h={8}/></div>
               <div style={{display:"flex",flexWrap:"wrap",gap:6,marginBottom:10}}>
                 {Array.from({length:WATER_GOAL}).map((_,i)=>(
-                  <span key={i} onClick={()=>setWater(i<dd.water?i:i+1)} style={{fontSize:22,cursor:"pointer",opacity:i<dd.water?1:0.2,transition:"opacity .2s"}}>💧</span>
+                  <span key={i} onClick={()=>setWater(i<dd.water?i:i+1)} style={{fontSize:22,cursor:"pointer",opacity:i<dd.water?1:0.2,transition:"opacity .2s"}}>o</span>
                 ))}
               </div>
               <div style={{display:"flex",gap:10,alignItems:"center"}}>
-                <button onClick={()=>setWater(dd.water-1)} style={{background:"#1e2a40",border:"none",color:"#7a8aaa",width:36,height:36,borderRadius:8,cursor:"pointer",fontSize:18}}>−</button>
+                <button onClick={()=>setWater(dd.water-1)} style={{background:"#1e2a40",border:"none",color:"#7a8aaa",width:36,height:36,borderRadius:8,cursor:"pointer",fontSize:18}}>-</button>
                 <div style={{flex:1,textAlign:"center",fontSize:12,color:"#7a8aaa",...s.mono}}>Each drop = 8 oz</div>
                 <button onClick={()=>setWater(dd.water+1)} style={{background:"#1e2a40",border:"none",color:"#7a8aaa",width:36,height:36,borderRadius:8,cursor:"pointer",fontSize:18}}>+</button>
               </div>
@@ -839,11 +829,11 @@ function App(){
           </div>
         )}
 
-        {/* ══ MEALS ══ */}
+        {/* == MEALS == */}
         {tab==="meals"&&(
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Full <span style={{color:gold}}>Meal Guide</span></h2>
-            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>1,800 cal/day · 170-180g protein · Pick one from each</p>
+            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>1,800 cal/day . 170-180g protein . Pick one from each</p>
             {[["Breakfast",BREAKFASTS],["Lunch",LUNCHES],["Dinner",DINNERS]].map(([lbl,items])=>(
               <div key={lbl} style={{marginBottom:20}}>
                 <div style={{...s.playfair,fontSize:17,fontWeight:700,marginBottom:10}}>{lbl}</div>
@@ -853,7 +843,7 @@ function App(){
                       <div style={{fontWeight:700,fontSize:14}}>{m.name}</div>
                       <div style={{...s.mono,fontSize:11,color:gold,background:"#c8a96e15",border:"1px solid #c8a96e33",borderRadius:20,padding:"2px 10px"}}>{m.cals} cal</div>
                     </div>
-                    <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginBottom:6}}>P:{m.p}g · C:{m.c}g · F:{m.f}g</div>
+                    <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginBottom:6}}>P:{m.p}g . C:{m.c}g . F:{m.f}g</div>
                     <div style={{display:"flex",flexWrap:"wrap",gap:4}}>{m.items.map(it=><span key={it} style={{fontSize:11,background:"#1e2a40",borderRadius:4,padding:"2px 7px",color:"#a0b0cc"}}>{it}</span>)}</div>
                   </div>
                 ))}
@@ -861,17 +851,17 @@ function App(){
             ))}
             <div style={{...s.playfair,fontSize:17,fontWeight:700,marginBottom:10}}>Snacks (pick 1)</div>
             <div style={{display:"flex",flexWrap:"wrap",gap:10,marginBottom:20}}>
-              {SNACKS.map(sn=><div key={sn.name} style={{...s.card,flex:"1 1 160px"}}><div style={{fontSize:13,marginBottom:4}}>{sn.name}</div><div style={{...s.mono,fontSize:11,color:gold}}>{sn.cals} cal · P:{sn.p}g C:{sn.c}g F:{sn.f}g</div></div>)}
+              {SNACKS.map(sn=><div key={sn.name} style={{...s.card,flex:"1 1 160px"}}><div style={{fontSize:13,marginBottom:4}}>{sn.name}</div><div style={{...s.mono,fontSize:11,color:gold}}>{sn.cals} cal . P:{sn.p}g C:{sn.c}g F:{sn.f}g</div></div>)}
             </div>
           </div>
         )}
 
-        {/* ══ LIFTING ══ */}
+        {/* == LIFTING == */}
         {tab==="lifting"&&(
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Machine <span style={{color:gold}}>Lifting Circuit</span></h2>
-            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>Mon / Wed / Fri · Bike 20 min FIRST · All machines · Joint-safe</p>
-            {[["01","Leg Press","3x12","Avoids direct knee stress. Skip on inflamed knee days."],["02","Seated Leg Curl","3x12","Hamstrings, knee-safe. Sub for leg press on bad knee days."],["03","Seated Chest Press","3x10","Upper body push. Keep back flat."],["04","Lat Pulldown","3x12","Back width. Seated — no foot stress."],["05","Seated Cable Row","3x12","Mid-back and posture."],["06","Shoulder Press Machine","3x10","Overhead strength, seated."],["07","Seated Calf Raise","3x15","Low impact, avoids plantar stress."],["08","Tricep Pushdown Machine","3x12","Elbows tucked, full extension at bottom."],["09","Bicep Curl Machine","3x12","Slow on the way down — that is where growth is."],["10","Ab Crunch Machine","3x15","Core strength, no spinal compression."]].map(([num,name,sets,notes])=>(
+            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>Mon / Wed / Fri . Bike 20 min FIRST . All machines . Joint-safe</p>
+            {[["01","Leg Press","3x12","Avoids direct knee stress. Skip on inflamed knee days."],["02","Seated Leg Curl","3x12","Hamstrings, knee-safe. Sub for leg press on bad knee days."],["03","Seated Chest Press","3x10","Upper body push. Keep back flat."],["04","Lat Pulldown","3x12","Back width. Seated  -  no foot stress."],["05","Seated Cable Row","3x12","Mid-back and posture."],["06","Shoulder Press Machine","3x10","Overhead strength, seated."],["07","Seated Calf Raise","3x15","Low impact, avoids plantar stress."],["08","Tricep Pushdown Machine","3x12","Elbows tucked, full extension at bottom."],["09","Bicep Curl Machine","3x12","Slow on the way down  -  that is where growth is."],["10","Ab Crunch Machine","3x15","Core strength, no spinal compression."]].map(([num,name,sets,notes])=>(
               <div key={name} style={{...s.card,display:"flex",gap:12,alignItems:"center",marginBottom:8}}>
                 <div style={{...s.mono,fontSize:11,color:"#3a4a6a",minWidth:22,flexShrink:0}}>{num}</div>
                 <div style={{flex:1}}><div style={{fontWeight:700,fontSize:14,marginBottom:2}}>{name}</div><div style={{color:"#7a8aaa",fontSize:12}}>{notes}</div></div>
@@ -880,16 +870,16 @@ function App(){
             ))}
             <div style={{...s.card,borderColor:"#ef444433",marginTop:4}}>
               <div style={{color:"#ef4444",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Joint Rules</div>
-              {["Ride bike 20 min BEFORE lifting — warms up knee and foot","Start light — form over weight every time","Skip leg press if knee is inflamed — do leg curl only","Never lock out the knees on any leg exercise","Rest 60-90 sec between sets"].map(r=><div key={r} style={{fontSize:13,padding:"6px 0 6px 10px",borderBottom:"1px solid #1e2a4040",borderLeft:"2px solid #ef444455"}}>{r}</div>)}
+              {["Ride bike 20 min BEFORE lifting  -  warms up knee and foot","Start light  -  form over weight every time","Skip leg press if knee is inflamed  -  do leg curl only","Never lock out the knees on any leg exercise","Rest 60-90 sec between sets"].map(r=><div key={r} style={{fontSize:13,padding:"6px 0 6px 10px",borderBottom:"1px solid #1e2a4040",borderLeft:"2px solid #ef444455"}}>{r}</div>)}
             </div>
           </div>
         )}
 
-        {/* ══ WEEK ══ */}
+        {/* == WEEK == */}
         {tab==="week"&&(
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Week <span style={{color:gold}}>Overview</span></h2>
-            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:14}}>{fmt(ws)} — {fmt(gdd(ws,6))}</p>
+            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:14}}>{fmt(ws)}  -  {fmt(gdd(ws,6))}</p>
             <div style={{...s.card,borderColor:"#3b82f644",marginBottom:12}}>
               <div style={{color:"#3b82f6",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Week {weekOff+1} Deficit Tracker</div>
               <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
@@ -940,11 +930,11 @@ function App(){
           </div>
         )}
 
-        {/* ══ WEIGHT ══ */}
+        {/* == WEIGHT == */}
         {tab==="weight"&&(
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Weight <span style={{color:gold}}>Log</span></h2>
-            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>Start: 280 lbs · Goal: 175 lbs</p>
+            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>Start: 280 lbs . Goal: 175 lbs</p>
             <div style={{...s.card,borderColor:"#c8a96e33",marginBottom:12}}>
               <div style={{...s.label,marginBottom:12}}>Log Today's Weight</div>
               <div style={{display:"flex",gap:10,alignItems:"center"}}>
@@ -967,7 +957,7 @@ function App(){
                       </div>
                     ))}
                   </div>
-                  <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginBottom:4}}>Journey to 175 lbs — {pct}% complete</div>
+                  <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginBottom:4}}>Journey to 175 lbs  -  {pct}% complete</div>
                   <div style={{height:10,background:border,borderRadius:5,overflow:"hidden"}}>
                     <div style={{height:"100%",width:pct+"%",background:"linear-gradient(90deg,#3b82f6,"+gold+")",borderRadius:5,transition:"width .5s"}}/>
                   </div>
@@ -1005,7 +995,7 @@ function App(){
                       </div>
                       <div style={{display:"flex",alignItems:"center",gap:10}}>
                         <div style={{...s.playfair,fontSize:17,fontWeight:700}}>{entry.weight} lbs</div>
-                        <button onClick={()=>{const nx=wLog.filter(e=>e.date!==entry.date);setWLog(nx);sSet("weightlog",nx);}} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",fontSize:14,padding:"2px 6px",borderRadius:4}}>✕</button>
+                        <button onClick={()=>{const nx=wLog.filter(e=>e.date!==entry.date);setWLog(nx);sSet("weightlog",nx);}} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",fontSize:14,padding:"2px 6px",borderRadius:4}}>x</button>
                       </div>
                     </div>
                   );
@@ -1015,15 +1005,15 @@ function App(){
           </div>
         )}
 
-        {/* ══ COACH ══ */}
+        {/* == COACH == */}
         {tab==="coach"&&(
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Your <span style={{color:gold}}>Coach</span></h2>
-            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:14}}>Reads your real stats · Responds instantly</p>
+            <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:14}}>Reads your real stats . Responds instantly</p>
             {!apiKey&&(
               <div style={{...s.card,borderColor:"#ef444455",marginBottom:14}}>
                 <div style={{color:"#ef4444",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>API Key Required</div>
-                <p style={{fontSize:13,color:"#a0b0cc",lineHeight:1.6,marginBottom:10}}>Get your free API key at <strong style={{color:"#c8a96e"}}>console.anthropic.com</strong> → API Keys → Create Key. Paste it below — saved permanently on your phone.</p>
+                <p style={{fontSize:13,color:"#a0b0cc",lineHeight:1.6,marginBottom:10}}>Get your free API key at <strong style={{color:"#c8a96e"}}>console.anthropic.com</strong> -> API Keys -> Create Key. Paste it below  -  saved permanently on your phone.</p>
                 <div style={{display:"flex",gap:8}}>
                   <input value={apiKeyInput} onChange={e=>setApiKeyInput(e.target.value)} placeholder="sk-ant-..." type="password" style={{flex:1,background:"#0d1422",border:"1px solid #2a3050",color:"#e8e0d0",padding:"10px 12px",borderRadius:8,...s.mono,fontSize:13,outline:"none"}}/>
                   <button onClick={saveApiKey} disabled={!apiKeyInput.trim()} style={{background:apiKeyInput.trim()?"#c8a96e":"#1e2a40",border:"none",color:apiKeyInput.trim()?"#0a0f1e":"#3a4a6a",padding:"10px 16px",borderRadius:8,...s.mono,fontSize:12,fontWeight:700,cursor:"pointer"}}>Save</button>
@@ -1032,11 +1022,11 @@ function App(){
             )}
             {apiKey&&(
               <div style={{...s.card,borderColor:"#22c55e44",marginBottom:14,display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px"}}>
-                <div style={{...s.mono,fontSize:11,color:"#22c55e"}}>✓ API Key connected</div>
+                <div style={{...s.mono,fontSize:11,color:"#22c55e"}}>v API Key connected</div>
                 <button onClick={()=>{localStorage.removeItem("api-key");setApiKey("");}} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",...s.mono,fontSize:11}}>Remove</button>
               </div>
             )}
-            {apiKeySaved&&<div style={{...s.mono,fontSize:12,color:"#22c55e",marginBottom:10,padding:"8px 12px",background:"#22c55e11",borderRadius:8}}>✓ API key saved — coach is ready!</div>}
+            {apiKeySaved&&<div style={{...s.mono,fontSize:12,color:"#22c55e",marginBottom:10,padding:"8px 12px",background:"#22c55e11",borderRadius:8}}>v API key saved  -  coach is ready!</div>}
             {coachMsgs.length===0&&(
               <div style={{marginBottom:14}}>
                 <div style={{...s.mono,fontSize:10,color:"#7a8aaa",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Quick Questions</div>
@@ -1050,7 +1040,7 @@ function App(){
             <div style={{background:dark,border:"1px solid "+border,borderRadius:12,padding:14,marginBottom:10,minHeight:280,maxHeight:440,overflowY:"auto",display:"flex",flexDirection:"column",gap:10}}>
               {coachMsgs.length===0&&(
                 <div style={{textAlign:"center",padding:"36px 16px"}}>
-                  <div style={{fontSize:32,marginBottom:10}}>💪</div>
+                  <div style={{fontSize:32,marginBottom:10}}></div>
                   <div style={{...s.playfair,fontSize:17,color:gold,marginBottom:6}}>Hey Greg, I am your Coach</div>
                   <div style={{fontSize:13,color:"#7a8aaa",lineHeight:1.6}}>I know your full plan, today's numbers, your deficit, and your goals. Ask me anything.</div>
                 </div>
@@ -1082,14 +1072,14 @@ function App(){
           </div>
         )}
 
-        {/* ══ BACKUP ══ */}
+        {/* == BACKUP == */}
         {tab==="backup"&&(
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Backup <span style={{color:gold}}>& Restore</span></h2>
             <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:16}}>Since this is an HTML file, your data saves permanently in this browser's localStorage. Use this to back it up or move it to another device.</p>
             <div style={{...s.card,borderColor:"#22c55e44",marginBottom:12}}>
-              <div style={{color:"#22c55e",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:10}}>Export — Save Your Data</div>
-              <p style={{fontSize:13,color:"#a0b0cc",lineHeight:1.6,marginBottom:12}}>Tap Export, then copy ALL the text. Paste it somewhere safe — your Notes app, email to yourself, or a Google Doc.</p>
+              <div style={{color:"#22c55e",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:10}}>Export  -  Save Your Data</div>
+              <p style={{fontSize:13,color:"#a0b0cc",lineHeight:1.6,marginBottom:12}}>Tap Export, then copy ALL the text. Paste it somewhere safe  -  your Notes app, email to yourself, or a Google Doc.</p>
               <button onClick={exportData} style={{background:"#22c55e",border:"none",color:dark,padding:"11px 20px",borderRadius:8,...s.mono,fontSize:12,fontWeight:700,cursor:"pointer",letterSpacing:1,width:"100%",marginBottom:10}}>Export My Data</button>
               {exportText&&(
                 <div>
@@ -1100,7 +1090,7 @@ function App(){
               )}
             </div>
             <div style={{...s.card,borderColor:"#3b82f644"}}>
-              <div style={{color:"#3b82f6",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:10}}>Restore — Paste Your Backup</div>
+              <div style={{color:"#3b82f6",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:10}}>Restore  -  Paste Your Backup</div>
               <p style={{fontSize:13,color:"#a0b0cc",lineHeight:1.6,marginBottom:12}}>Paste your previously exported backup below and tap Restore.</p>
               <textarea value={importText} onChange={e=>setImportText(e.target.value)} placeholder="Paste your backup data here..." rows={4} style={{width:"100%",background:"#0d1422",border:"1px solid #2a3050",color:"#e8e0d0",padding:10,borderRadius:8,...s.mono,fontSize:12,outline:"none",resize:"none",marginBottom:8}}/>
               <button onClick={importData} disabled={!importText.trim()} style={{background:importText.trim()?"#3b82f6":"#1e2a40",border:"none",color:importText.trim()?"#fff":"#3a4a6a",padding:"11px 20px",borderRadius:8,...s.mono,fontSize:12,fontWeight:700,cursor:"pointer",letterSpacing:1,width:"100%"}}>Restore My Data</button>
@@ -1109,9 +1099,9 @@ function App(){
             <div style={{...s.card,borderColor:"#c8a96e33",marginTop:12}}>
               <div style={{...s.label,marginBottom:10}}>How to Add to Phone Home Screen</div>
               <div style={{fontSize:13,color:"#a0b0cc",lineHeight:1.8}}>
-                <strong style={{color:"#e8e0d0"}}>iPhone (Safari):</strong> Open this file in Safari → tap Share → "Add to Home Screen"<br/>
-                <strong style={{color:"#e8e0d0"}}>Android (Chrome):</strong> Open in Chrome → tap Menu → "Add to Home Screen"<br/>
-                <strong style={{color:"#e8e0d0"}}>It will look and feel like a native app</strong> — full screen, no browser bars.
+                <strong style={{color:"#e8e0d0"}}>iPhone (Safari):</strong> Open this file in Safari -> tap Share -> "Add to Home Screen"<br/>
+                <strong style={{color:"#e8e0d0"}}>Android (Chrome):</strong> Open in Chrome -> tap Menu -> "Add to Home Screen"<br/>
+                <strong style={{color:"#e8e0d0"}}>It will look and feel like a native app</strong>  -  full screen, no browser bars.
               </div>
             </div>
           </div>
