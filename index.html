@@ -74,42 +74,34 @@ const SCHEDULE = {
 const BURNS = {"Walk 1 mile":120,"Full Body Lift":320,"Stationary Bike 20 min":200,"Essentrics 20 min":80,"Essentrics (gentle)":60,"Swim 30 min":350};
 
 const BREAKFASTS = [
-  {name:"Greek Yogurt Power Bowl",cals:420,p:48,c:44,f:6,items:["1.5 cups 0% Greek yogurt","1/2 cup blueberries","2 tbsp granola","1 scoop protein powder","1 tbsp honey"]},
-  {name:"Egg White Veggie Scramble",cals:380,p:44,c:28,f:9,items:["6 egg whites + 1 whole egg","1/2 cup spinach","1/4 cup bell peppers","1 slice whole grain toast","2 oz turkey side"]},
-  {name:"Overnight Oats + Protein",cals:400,p:40,c:50,f:11,items:["1/2 cup rolled oats","1/2 cup almond milk","1 scoop protein powder","1 tbsp chia seeds","1/2 banana","1 tbsp peanut butter"]},
-  {name:"Southwest Egg White Burrito",cals:390,p:42,c:32,f:10,items:["5 egg whites + 1 whole egg","1 whole wheat tortilla","2 tbsp black beans","1/4 cup salsa","1 oz reduced-fat cheese","Fresh cilantro"]},
+  {name:"Mon & Thu — High Protein Scramble",cals:328,p:36,c:34,f:6,items:["6 egg whites + 1 whole egg","1 cup fresh spinach","1/4 cup diced red bell pepper","1/4 cup black beans (rinsed, stirred in)","1 slice Ezekiel bread (toasted)","Black pepper, garlic powder, hot sauce"]},
+  {name:"Tue & Fri — Greek Yogurt Power Bowl",cals:420,p:50,c:38,f:6,items:["1.5 cups 0% Fage plain Greek yogurt","1 scoop vanilla whey protein (stirred in)","1/2 cup fresh blueberries","1 tbsp chia seeds","1 tbsp raw honey","Dash cinnamon"]},
+  {name:"Wed & Sat — Cottage Cheese Pancakes",cals:370,p:36,c:38,f:9,items:["Blend: 1/2 cup cottage cheese + 1/2 cup oats + 2 eggs + 1 tsp vanilla + 1/2 tsp cinnamon","Cook on medium heat 3 min each side","Top: 1/2 cup fresh raspberries + 1 tbsp light maple syrup"]},
+  {name:"Sunday — Southwest Egg Burrito",cals:390,p:42,c:32,f:10,items:["5 egg whites + 1 whole egg scrambled","1 whole wheat tortilla (warmed)","2 tbsp black beans (rinsed)","1/4 cup fresh salsa","1 oz reduced-fat Mexican cheese","Fresh cilantro"]},
   {name:"Smoked Salmon Avocado Toast",cals:410,p:38,c:30,f:14,items:["2 slices Ezekiel bread","3 oz smoked salmon","2 tbsp blended avocado","Sliced cucumber & tomato","Everything bagel seasoning","Squeeze of lemon"]},
-  {name:"Cottage Cheese Protein Pancakes",cals:370,p:42,c:34,f:8,items:["1/2 cup cottage cheese","1/2 cup rolled oats","2 whole eggs","1/2 tsp cinnamon","1/2 cup fresh berries","1 tbsp maple syrup (light)"]},
+  {name:"Overnight Oats + Protein",cals:400,p:40,c:50,f:11,items:["1/2 cup rolled oats","1/2 cup almond milk","1 scoop protein powder","1 tbsp chia seeds","1/2 banana","1 tbsp peanut butter"]},
 ];
 const LUNCHES = [
-  {name:"Big Turkey Wrap",cals:450,p:48,c:40,f:9,items:["6 oz lean turkey breast","Whole wheat tortilla","Romaine, tomato, cucumber","2 tbsp hummus","1 tsp mustard"]},
-  {name:"Tuna Power Salad",cals:420,p:46,c:28,f:14,items:["2 cans tuna in water","2 cups mixed greens","1/2 cup chickpeas","Cherry tomatoes, cucumber","1 tbsp olive oil + lemon"]},
-  {name:"Chicken Rice Bowl",cals:460,p:50,c:44,f:7,items:["6 oz grilled chicken","1/2 cup brown rice","Steamed broccoli + carrots","1 tbsp low-sodium soy sauce"]},
-  {name:"Mediterranean Chicken Salad",cals:440,p:48,c:22,f:16,items:["6 oz grilled chicken breast","2 cups romaine lettuce","1/4 cup chickpeas","Cucumber, tomato, red onion","2 tbsp feta cheese","2 tbsp light Greek dressing"]},
-  {name:"Lemon Herb Salmon Bowl",cals:470,p:46,c:36,f:14,items:["5 oz baked salmon","1/2 cup quinoa","Roasted asparagus & cherry tomatoes","2 tbsp lemon-herb dressing","Fresh dill & capers"]},
-  {name:"Turkey & White Bean Soup",cals:410,p:44,c:34,f:8,items:["5 oz lean ground turkey","1/2 cup white beans","Diced carrots, celery, onion","2 cups low-sodium chicken broth","Fresh thyme & rosemary","1 slice whole wheat bread"]},
+  {name:"MWF — Tuna Power Salad",cals:420,p:48,c:28,f:14,items:["2 cans Starkist tuna in water (drained)","3 cups mixed greens","1/2 cup chickpeas (rinsed)","1 cup cherry tomatoes","1/2 cucumber sliced","1/4 red onion sliced thin","Dressing: 1 tbsp olive oil + juice of 1 lemon + 1 tsp Dijon + black pepper"]},
+  {name:"TThSat — Chicken Quinoa Bowl",cals:460,p:52,c:40,f:10,items:["6 oz grilled chicken breast (garlic powder, smoked paprika, cumin, black pepper)","1/2 cup cooked quinoa","1 cup roasted broccoli (400°F 20 min)","1/2 cup shredded carrots","2 tbsp hummus on the side","Squeeze of lemon + fresh parsley"]},
+  {name:"Sunday — Turkey White Bean Soup",cals:410,p:46,c:36,f:8,items:["5 oz lean ground turkey (browned)","1/2 cup white cannellini beans","2 cups low-sodium chicken broth","1/2 cup diced carrots, celery, onion","2 cloves garlic minced","Fresh thyme + rosemary + bay leaf","1 slice Ezekiel bread on the side"]},
 ];
 const DINNERS = [
-  {name:"Taco Night",cals:540,p:52,c:46,f:14,items:["6 oz ground turkey w/ cumin & chili powder","Corn tortillas (2)","Lettuce, tomato, salsa","2 tbsp guacamole sauce","Light sour cream"]},
-  {name:"Chicken Parmesan",cals:520,p:58,c:30,f:16,items:["8 oz baked chicken breast","1/2 cup marinara","1 oz part-skim mozzarella","Zucchini noodles","Side salad"]},
-  {name:"Salmon Teriyaki Bowl",cals:530,p:52,c:38,f:16,items:["7 oz salmon fillet, baked","1/2 cup jasmine rice","Steamed edamame","Cucumber slices","Low-sodium teriyaki glaze"]},
-  {name:"Smash Burger Night",cals:520,p:50,c:40,f:16,items:["6 oz 93% lean ground beef","Whole wheat thin bun","Lettuce, tomato, onion, pickles","1 tbsp light mayo + mustard","Roasted sweet potato wedges"]},
-  {name:"Garlic Shrimp & Cauliflower Rice",cals:500,p:52,c:18,f:18,items:["8 oz large shrimp, peeled","2 cups cauliflower rice","4 cloves garlic, olive oil, lemon","Cherry tomatoes, fresh parsley","Red pepper flakes"]},
-  {name:"Turkey & Veggie Stir Fry",cals:490,p:52,c:36,f:10,items:["7 oz ground turkey","Broccoli, snap peas, bell peppers, carrots","1/2 cup brown rice","Low-sodium soy sauce + ginger + garlic","Sesame oil"]},
-  {name:"Sheet Pan Chicken & Veggies",cals:480,p:54,c:28,f:14,items:["8 oz chicken thighs (skin removed)","Broccoli, bell peppers, red onion, zucchini","2 tbsp olive oil + garlic + Italian seasoning","1/2 cup brown rice","Lemon wedges"]},
-  {name:"Baked Cod with Roasted Tomatoes",cals:420,p:50,c:24,f:10,items:["8 oz cod fillets","Cherry tomatoes, olives, capers","Fresh basil + garlic + olive oil","1/2 cup quinoa","Steamed green beans"]},
-  {name:"Turkey Stuffed Bell Peppers",cals:460,p:48,c:34,f:12,items:["6 oz lean ground turkey","3 bell peppers (halved)","1/4 cup brown rice","1/2 cup marinara sauce","1 oz reduced-fat cheese","Fresh parsley"]},
-  {name:"Honey Garlic Pork Tenderloin",cals:470,p:50,c:30,f:12,items:["7 oz pork tenderloin","2 tsp honey + 3 garlic cloves","1/2 cup roasted sweet potato","Steamed broccoli & carrots","Fresh rosemary"]},
-  {name:"Mahi Mahi Fish Tacos",cals:490,p:46,c:42,f:14,items:["7 oz grilled mahi mahi","Corn tortillas (2)","Shredded cabbage & mango salsa","2 tbsp Greek yogurt sauce","Fresh lime & cilantro"]},
-  {name:"Chicken & Broccoli Casserole",cals:500,p:56,c:32,f:14,items:["8 oz shredded chicken breast","2 cups broccoli florets","1/2 cup brown rice","Low-sodium cream of mushroom (light)","1 oz reduced-fat cheddar","Garlic powder & onion powder"]},
+  {name:"Monday — Sheet Pan Salmon & Asparagus",cals:530,p:54,c:36,f:16,items:["7 oz wild salmon fillet","1 bunch asparagus (ends snapped)","1 cup cherry tomatoes","1 tbsp olive oil + 3 minced garlic cloves + lemon zest","Fresh dill + capers + lemon wedge","1/2 cup cooked quinoa on the side","400°F for 18 minutes on one sheet pan"]},
+  {name:"Tuesday — Turkey Taco Bowl",cals:510,p:52,c:46,f:12,items:["6 oz lean ground turkey (cumin, chili powder, garlic powder, oregano)","1/2 cup brown rice (base)","1/4 cup black beans (rinsed)","Shredded romaine + diced tomato + jalapeño","2 tbsp fresh salsa + 1 tbsp 0% Greek yogurt","Fresh lime + cilantro — bowl only, no tortilla"]},
+  {name:"Wednesday — Baked Chicken Parmesan",cals:520,p:58,c:28,f:16,items:["8 oz chicken breast (butterflied thin)","Coat: 2 tbsp whole wheat breadcrumbs + 1 tbsp Parmesan + garlic powder","Bake 425°F 22 min — broil last 3 min","1/2 cup Rao's marinara + 1 oz part-skim mozzarella melted","2 cups zucchini noodles (sauté 3 min)","Large side salad: romaine, cucumber, tomato, 1 tbsp light Italian"]},
+  {name:"Thursday — Garlic Shrimp & Cauliflower Rice",cals:500,p:52,c:18,f:20,items:["8 oz large shrimp (peeled, deveined)","3 cups cauliflower rice (squeeze dry)","5 garlic cloves minced + 1 tbsp olive oil + 1 tbsp butter","1 cup cherry tomatoes halved","Fresh parsley + lemon juice + red pepper flakes"]},
+  {name:"Friday — Mahi Mahi Fish Tacos",cals:490,p:48,c:42,f:14,items:["7 oz mahi mahi (chili-lime rub — grill 4 min/side)","2 corn tortillas (warmed)","1 cup purple cabbage shredded + lime juice","Mango salsa: 1/2 mango + jalapeño + red onion + cilantro + lime","Sauce: 2 tbsp 0% Greek yogurt + 1 tsp sriracha + lime zest"]},
+  {name:"Saturday — Smash Burger Night",cals:520,p:50,c:42,f:16,items:["6 oz 93% lean ground beef (two 3 oz patties, smash on hot cast iron 2 min/side)","1 whole wheat thin bun","Romaine + tomato + red onion + pickles + 1 oz reduced-fat cheddar","Sauce: 1 tsp light mayo + 1 tsp mustard + 1 tsp ketchup","Side: 1 medium sweet potato wedges, air fry 400°F 20 min"]},
+  {name:"Sunday — Turkey Stuffed Bell Peppers",cals:460,p:50,c:34,f:12,items:["6 oz lean ground turkey + 1/4 cup brown rice + 1/2 cup Rao's marinara","1/4 cup diced onion + 2 cloves garlic + oregano + basil","Fill 3 large bell pepper halves","Top: 1 oz reduced-fat mozzarella","375°F covered 35 min, uncovered 10 min"]},
 ];
 const SNACKS = [
-  {name:"Apple + String Cheese x2",cals:200,p:14,c:26,f:8},
-  {name:"Celery + 2 tbsp Peanut Butter",cals:170,p:6,c:10,f:12},
-  {name:"Cottage Cheese + sliced cucumber",cals:180,p:20,c:10,f:5},
-  {name:"Protein shake (water-based)",cals:150,p:30,c:6,f:2},
-  {name:"Hard Boiled Egg Whites + Cherry Tomatoes",cals:120,p:18,c:6,f:1},
+  {name:"Daily Protein Shake",cals:150,p:30,c:6,f:2},
+  {name:"Cottage Cheese + Cucumber",cals:180,p:20,c:10,f:5},
   {name:"Greek Yogurt + Walnuts",cals:190,p:16,c:12,f:9},
+  {name:"Almonds + Raspberries",cals:175,p:6,c:14,f:13},
+  {name:"String Cheese x2 + Apple",cals:200,p:14,c:26,f:8},
+  {name:"Celery + 2 tbsp Peanut Butter",cals:170,p:6,c:10,f:12},
 ];
 const ALL_MEALS = [...BREAKFASTS,...LUNCHES,...DINNERS,...SNACKS];
 
@@ -215,7 +207,7 @@ const BARCODE_DB = {
   "031000122027":{name:"Tyson Grilled Chicken Strips 3oz",cals:110,p:21,c:2,f:3},
 };
 
-const WATER_GOAL = 13;
+const WATER_GOAL = 16;
 const BMR = 2200;
 const PROGRAM_START = new Date(2026,2,16);
 const IC = {HIGH:"#ef4444",MED:"#f59e0b",REST:"#22c55e"};
@@ -406,6 +398,33 @@ function App(){
 
   async function sendCoach(q){
     const msg=(q||coachInput).trim();if(!msg)return;
+    // Morning check-in
+    if(msg.includes("Morning Check-In")||msg.toLowerCase().includes("morning check")||msg.toLowerCase()==="good morning"){
+      const lat=wLog.length>0?wLog[wLog.length-1].weight:null;
+      const lost=lat?(280-lat).toFixed(1):0;
+      const daySchedule=SCHEDULE[dayName];
+      const isLift=daySchedule.intensity==="HIGH";
+      const isSwim=daySchedule.acts.some(a=>a.includes("Swim"));
+      const workoutType=isLift?"lifting day — bike warm-up first, then all 10 machines":isSwim?"swim day — 45 minutes, intervals":dayName==="Sunday"?"rest day — walk, bike, and Essentrics only":"active day";
+      const bfNames={"Monday":"High Protein Scramble","Tuesday":"Greek Yogurt Power Bowl","Wednesday":"Cottage Cheese Pancakes","Thursday":"High Protein Scramble","Friday":"Greek Yogurt Power Bowl","Saturday":"Cottage Cheese Pancakes","Sunday":"Southwest Egg Burrito"};
+      const lunchNames={"Monday":"Tuna Power Salad","Tuesday":"Chicken Quinoa Bowl","Wednesday":"Tuna Power Salad","Thursday":"Chicken Quinoa Bowl","Friday":"Tuna Power Salad","Saturday":"Chicken Quinoa Bowl","Sunday":"Turkey White Bean Soup"};
+      const dinnerNames={"Monday":"Sheet Pan Salmon & Asparagus","Tuesday":"Turkey Taco Bowl","Wednesday":"Baked Chicken Parmesan","Thursday":"Garlic Shrimp & Cauliflower Rice","Friday":"Mahi Mahi Fish Tacos","Saturday":"Smash Burger Night","Sunday":"Turkey Stuffed Bell Peppers"};
+      const morningMsg="Good morning Greg. Today is "+dayName+". "+(lat?"You are at "+lat+" lbs — down "+lost+" lbs from 280. ":"Log your weight first thing. ")+"Here is your day: Breakfast is "+bfNames[dayName]+". Today is a "+workoutType+". Lunch: "+lunchNames[dayName]+". Snack: protein shake at 3 PM. Dinner: "+dinnerNames[dayName]+". Evening bike at 7 PM, Essentrics at 7:25 PM, AA meeting after. Gratitude prayer at 9 PM, in bed by 9:30. Say your morning prayer, drink your water, and go. One day at a time Greg. Let's go.";
+      setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:morningMsg}]);
+      setCoachInput("");
+      return;
+    }
+    // Evening check-in
+    if(msg.includes("Evening Check-In")||msg.toLowerCase().includes("evening check")||msg.toLowerCase().includes("good night")){
+      const pct=acts.length>0?Math.round(actsDone/acts.length*100):0;
+      const waterDone=dd.water>=WATER_GOAL;
+      const score=[pct>=80,mealsDone>=3,deficit>=800,waterDone].filter(Boolean).length;
+      const grade=score===4?"Perfect execution today Greg. Every box checked. This is exactly how May 5th gets built — one flawless day at a time.":score===3?"Strong day Greg. Three out of four pillars solid. Identify the one gap and close it tomorrow.":score===2?"Decent effort but the plan demands more. Review what slipped today and recommit tonight before you sleep.":"Today was a reset day Greg. That is okay — one day does not break a 35-day plan. But tomorrow has to be different. Say your gratitude prayer, get to bed, and start clean at 5:45 AM.";
+      const eveningMsg=grade+" Here is your scorecard: Activities "+actsDone+"/"+acts.length+" ("+pct+"%). Meals logged: "+mealsDone+"/4. Calorie deficit today: "+deficit+" cal. Water: "+(dd.water*8)+"/130oz. This week total deficit: "+wkTot.deficit+" cal — that is "+(wkTot.deficit/3500).toFixed(1)+" lbs of fat. "+(deficit>0?"Good deficit today. ":"Log your meals if you haven't — the tracker needs that data. ")+"Say your gratitude prayer. Name three specific things from today. Then get to sleep — 9:30 PM lights out. You need those 8 hours. See you at 5:45 AM.";
+      setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:eveningMsg}]);
+      setCoachInput("");
+      return;
+    }
     const lat=wLog.length>0?wLog[wLog.length-1].weight:null;
     const lost=lat?(280-lat).toFixed(1):0;
     const avgDef=wkTot.deficit>0?wkTot.deficit/7:1000;
@@ -558,15 +577,15 @@ function App(){
             <div style={{...s.card,borderColor:"#c8a96e33"}}>
               <div style={{...s.label,marginBottom:10}}>Calories & Macros</div>
               <div style={{display:"flex",gap:6,marginBottom:12,flexWrap:"wrap"}}>
-                {[["Eaten",tCals,tCals>1900?"#ef4444":"#e8e0d0"],["Burned",burned,"#22c55e"],["Net",tCals-burned,(tCals-burned)<800?"#ef4444":(tCals-burned)<=1400?"#22c55e":"#f59e0b"],["Deficit",deficit,"#3b82f6"]].map(([l,v,c])=>(
+                {[["Eaten",tCals,tCals>1700?"#ef4444":"#e8e0d0"],["Burned",burned,"#22c55e"],["Net",tCals-burned,(tCals-burned)<800?"#ef4444":(tCals-burned)<=1400?"#22c55e":"#f59e0b"],["Deficit",deficit,"#3b82f6"]].map(([l,v,c])=>(
                   <div key={l} style={{flex:"1 1 55px",background:"#0d1422",border:"1px solid "+border,borderRadius:8,padding:"8px 4px",textAlign:"center"}}>
                     <div style={{...s.mono,fontSize:13,fontWeight:700,color:c}}>{v}</div>
                     <div style={{fontSize:9,color:"#7a8aaa",...s.mono,letterSpacing:1,marginTop:2,textTransform:"uppercase"}}>{l}</div>
                   </div>
                 ))}
               </div>
-              <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginBottom:3}}>Eaten vs 1,800 goal</div>
-              <Bar pct={Math.round(tCals/1800*100)} color={tCals>1900?"#ef4444":gold} h={8}/>
+              <div style={{...s.mono,fontSize:10,color:"#7a8aaa",marginBottom:3}}>Eaten vs 1,600 goal</div>
+              <Bar pct={Math.round(tCals/1800*100)} color={tCals>1700?"#ef4444":gold} h={8}/>
               <div style={{marginTop:10}}>
                 {[["Protein",tP,180,"g","#22c55e"],["Carbs",tC,120,"g","#3b82f6"],["Fat",tF,65,"g","#f59e0b"]].map(([n,v,g,u,c])=>(
                   <div key={n} style={{marginBottom:8}}>
@@ -1051,4 +1070,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
-
