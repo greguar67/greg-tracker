@@ -243,6 +243,9 @@ function App(){
   const [coachInput,setCoachInput]=useState("");
   const [coachLoading,setCoachLoading]=useState(false);
   const [exportText,setExportText]=useState("");
+  const [apiKey,setApiKey]=useState(()=>localStorage.getItem("api-key")||"");
+  const [apiKeyInput,setApiKeyInput]=useState("");
+  const [apiKeySaved,setApiKeySaved]=useState(false);
   const [importText,setImportText]=useState("");
   const [importMsg,setImportMsg]=useState("");
   const saveTimer=useRef(null);
@@ -353,6 +356,16 @@ function App(){
     const nx=[...wLog.filter(e=>e.date!==today),{date:today,weight:w}].sort((a,b)=>a.date.localeCompare(b.date));
     setWLog(nx);flash(sSet("weightlog",nx));setWInput("");
   }
+  function saveApiKey(){
+    const key=apiKeyInput.trim();
+    if(!key)return;
+    localStorage.setItem("api-key",key);
+    setApiKey(key);
+    setApiKeyInput("");
+    setApiKeySaved(true);
+    setTimeout(()=>setApiKeySaved(false),3000);
+  }
+
   function exportData(){
     const keys=Object.keys(localStorage).filter(k=>k.startsWith("day:")||k==="weightlog"||k==="saved-foods");
     const out={};keys.forEach(k=>{try{out[k]=JSON.parse(localStorage.getItem(k));}catch{}});
@@ -398,6 +411,10 @@ function App(){
 
   async function sendCoach(q){
     const msg=(q||coachInput).trim();if(!msg)return;
+    if(!apiKey){
+      setCoachMsgs([...coachMsgs,{role:"user",content:msg},{role:"assistant",content:"Please add your Anthropic API key above to activate the coach. Get one free at console.anthropic.com → API Keys → Create Key."}]);
+      setCoachInput("");return;
+    }
     // Morning check-in
     if(msg.includes("Morning Check-In")||msg.toLowerCase().includes("morning check")||msg.toLowerCase()==="good morning"){
       const lat=wLog.length>0?wLog[wLog.length-1].weight:null;
@@ -452,7 +469,7 @@ function App(){
             :proxy+encodeURIComponent("https://api.anthropic.com/v1/messages");
           const res=await fetch(url,{
             method:"POST",
-            headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+            headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","x-api-key":apiKey,"anthropic-dangerous-direct-browser-access":"true"},
             body:JSON.stringify(payload)
           });
           const rawText=await res.text();
@@ -981,6 +998,23 @@ function App(){
           <div style={{paddingTop:14}}>
             <h2 style={{...s.playfair,fontSize:22,marginBottom:4}}>Your <span style={{color:gold}}>Coach</span></h2>
             <p style={{color:"#7a8aaa",fontSize:12,...s.mono,marginBottom:14}}>Reads your real stats · Responds instantly</p>
+            {!apiKey&&(
+              <div style={{...s.card,borderColor:"#ef444455",marginBottom:14}}>
+                <div style={{color:"#ef4444",...s.mono,fontSize:10,letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>API Key Required</div>
+                <p style={{fontSize:13,color:"#a0b0cc",lineHeight:1.6,marginBottom:10}}>Get your free API key at <strong style={{color:"#c8a96e"}}>console.anthropic.com</strong> → API Keys → Create Key. Paste it below — saved permanently on your phone.</p>
+                <div style={{display:"flex",gap:8}}>
+                  <input value={apiKeyInput} onChange={e=>setApiKeyInput(e.target.value)} placeholder="sk-ant-..." type="password" style={{flex:1,background:"#0d1422",border:"1px solid #2a3050",color:"#e8e0d0",padding:"10px 12px",borderRadius:8,...s.mono,fontSize:13,outline:"none"}}/>
+                  <button onClick={saveApiKey} disabled={!apiKeyInput.trim()} style={{background:apiKeyInput.trim()?"#c8a96e":"#1e2a40",border:"none",color:apiKeyInput.trim()?"#0a0f1e":"#3a4a6a",padding:"10px 16px",borderRadius:8,...s.mono,fontSize:12,fontWeight:700,cursor:"pointer"}}>Save</button>
+                </div>
+              </div>
+            )}
+            {apiKey&&(
+              <div style={{...s.card,borderColor:"#22c55e44",marginBottom:14,display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px"}}>
+                <div style={{...s.mono,fontSize:11,color:"#22c55e"}}>✓ API Key connected</div>
+                <button onClick={()=>{localStorage.removeItem("api-key");setApiKey("");}} style={{background:"none",border:"none",color:"#3a4a6a",cursor:"pointer",...s.mono,fontSize:11}}>Remove</button>
+              </div>
+            )}
+            {apiKeySaved&&<div style={{...s.mono,fontSize:12,color:"#22c55e",marginBottom:10,padding:"8px 12px",background:"#22c55e11",borderRadius:8}}>✓ API key saved — coach is ready!</div>}
             {coachMsgs.length===0&&(
               <div style={{marginBottom:14}}>
                 <div style={{...s.mono,fontSize:10,color:"#7a8aaa",letterSpacing:2,textTransform:"uppercase",marginBottom:8}}>Quick Questions</div>
